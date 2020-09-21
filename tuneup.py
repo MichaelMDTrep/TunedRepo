@@ -5,7 +5,8 @@
 Use the timeit and cProfile libraries to find bad code.
 """
 
-__author__ = "Michael Trepanier"
+__author__ = """Michael Trepanier got help from
+Joseph Hafed,Howard Post, and John Wilkinson"""
 
 
 import cProfile
@@ -78,15 +79,13 @@ def optimized_find_duplicate_movies(src):
 def timeit_helper(func_name, func_params):
     """Part A: Obtain some profiling measurements using timeit"""
     assert isinstance(func_name, str)
-    setup = """
-from __main__ import find_duplicate_movies
-src = "movies.txt"
-    """
+
     # setup += f"src={func_params}"
 
     # wrapped = wrapper(func_name, func_params)
-    # statement = func_name + "(" + ")"
-    t = timeit.Timer(stmt="print(type(d))", setup="d = []")
+    setup = f"from { __name__} import {func_name}"
+    stmt = f"{func_name}('{func_params}')"
+    t = timeit.Timer(stmt=stmt, setup=setup)
     runs_per_repeat = 3
     num_repeats = 5
     result = t.repeat(repeat=num_repeats, number=runs_per_repeat)
@@ -95,8 +94,10 @@ src = "movies.txt"
     # min_list = list(avg)
     time_cost = min(result)/(num_repeats)
 
-    print(f"func={func_name}  num_repeats={num_repeats} \
-    runs_per_repeat={runs_per_repeat} time_cost={time_cost} sec")
+    print(f"func={func_name}  num_repeats={num_repeats}" +
+          f" runs_per_repeat={runs_per_repeat} time_cost={time_cost} sec")
+    # print(f"func={func_name}('{func_params}')  num_repeats={num_repeats}
+    # runs_per_repeat={runs_per_repeat} time_cost={time_cost} sec")
     return t
 
 
